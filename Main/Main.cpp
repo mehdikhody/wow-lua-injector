@@ -14,6 +14,7 @@ int main() {
 		std::cout << "Process Base Address: " << process->GetBaseAddress() << "\n";
 		std::cout << "Character Name: " << process->character->GetName() << "\n";
 		std::cout << "Character Class: " << process->character->GetClassName() << "\n\n";
+		process->CloseProcess();
 	}
 
 	return 0;

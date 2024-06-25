@@ -15,6 +15,7 @@ public:
 	HANDLE GetProcessHandle() const;
 	DWORD GetProcessId() const;
 	DWORD GetBaseAddress();
+	void CloseProcess();
 
 	static std::vector<Process*> GetProcessesByName(const char* ProcessName);
 private:

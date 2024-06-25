@@ -17,6 +17,10 @@ Process::~Process() {
 	CloseHandle(hProcess);
 }
 
+void Process::CloseProcess() {
+	delete this;
+}
+
 HANDLE Process::GetProcessHandle() const {
 	return hProcess;
 }
