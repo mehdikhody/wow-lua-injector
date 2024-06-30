@@ -1,25 +1,25 @@
 #pragma once
+#include <memory>
 #include <vector>
 #include <windows.h>
 #include "Memory.h"
-#include "Character.h"
 
 class Process {
 public:
 	Process(DWORD processId, HANDLE hProcess);
 	~Process();
 
-	Memory* memory;
-	Character* character;
+	std::shared_ptr<Memory> memory;
 
 	HANDLE GetProcessHandle() const;
 	DWORD GetProcessId() const;
 	DWORD GetBaseAddress();
-	void CloseProcess();
 
-	static std::vector<Process*> GetProcessesByName(const char* ProcessName);
+	static std::vector<std::shared_ptr<Process>> GetProcessesByName(const std::string& processName);
 private:
 	HANDLE hProcess;
 	DWORD processId;
 	DWORD baseAddress;
 };
+
+typedef std::vector<std::shared_ptr<Process>> Processes;

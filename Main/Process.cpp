@@ -6,19 +6,13 @@
 Process::Process(DWORD processId, HANDLE hProcess) {
 	this->hProcess = hProcess;
 	this->processId = processId;
-	baseAddress = GetBaseAddress();
-	memory = new Memory(hProcess);
-	character = new Character(memory, baseAddress);
+	GetBaseAddress();
+
+	memory = std::make_shared<Memory>(hProcess);
 }
 
 Process::~Process() {
-	delete memory;
-	delete character;
 	CloseHandle(hProcess);
-}
-
-void Process::CloseProcess() {
-	delete this;
 }
 
 HANDLE Process::GetProcessHandle() const {
@@ -41,8 +35,8 @@ DWORD Process::GetBaseAddress() {
 	return baseAddress;
 }
 
-std::vector<Process*> Process::GetProcessesByName(const char* ProcessName) {
-	std::vector<Process*> processes;
+Processes Process::GetProcessesByName(const std::string& processName) {
+	Processes processes;
 	DWORD aProcesses[1024], cbNeeded, cProcesses;
 	if (EnumProcesses(aProcesses, sizeof(aProcesses), &cbNeeded)) {
 		cProcesses = cbNeeded / sizeof(DWORD);
@@ -54,8 +48,8 @@ std::vector<Process*> Process::GetProcessesByName(const char* ProcessName) {
 				DWORD cbNeeded;
 				if (EnumProcessModules(hProcess, &hMod, sizeof(hMod), &cbNeeded)) {
 					GetModuleBaseNameA(hProcess, hMod, szProcessName, sizeof(szProcessName) / sizeof(char));
-					if (strcmp(szProcessName, ProcessName) == 0) {
-						processes.push_back(new Process(aProcesses[i], hProcess));
+					if (strcmp(szProcessName, processName.c_str()) == 0) {
+						processes.push_back(std::make_shared<Process>(aProcesses[i], hProcess));
 					}
 					else {
 						CloseHandle(hProcess);

@@ -1,22 +1,22 @@
 #include "Character.h"
 #include "Offsets.h"
+#include "Process.h"
 
-Character::Character(Memory* memory, DWORD baseAddress) {
-	this->memory = memory;
-	this->baseAddress = baseAddress;
+Character::Character(std::shared_ptr<Process> process) {
+	this->process = process;
 }
 
 Character::~Character() {
 }
 
 std::string Character::GetName() {
-	DWORD dwCharacterNameAddress = baseAddress + Offsets::CharacterName;
-	return memory->ReadString(dwCharacterNameAddress, 30);
+	DWORD dwCharacterNameAddress = process->GetBaseAddress() + Offsets::CharacterName;
+	return process->memory->ReadString(dwCharacterNameAddress, 30);
 }
 
 CharacterClass Character::GetClass() {
-	DWORD dwCharacterClassAddress = baseAddress + Offsets::CharacterClass;
-	BYTE characterClass = memory->ReadByte(dwCharacterClassAddress);
+	DWORD dwCharacterClassAddress = process->GetBaseAddress() + Offsets::CharacterClass;
+	BYTE characterClass = process->memory->Read<BYTE>(dwCharacterClassAddress);
 
 	switch (characterClass) {
 	case 1: return CharacterClass::Warrior;

@@ -3,6 +3,7 @@
 
 namespace Offsets {
 	const DWORD WowVersion = 0x8AD851;
+	const DWORD AuthState = 0x9CE474;
 	const DWORD GameState = 0x7D078A;
 	const DWORD CharacterName = 0x879D18;
 	const DWORD CharacterClass = 0x879E89;
